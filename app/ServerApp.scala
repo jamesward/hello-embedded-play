@@ -1,11 +1,8 @@
-import play.api.libs.ws.ahc.{AhcConfigBuilder, AhcWSClient}
-import play.api.mvc.Results.EmptyContent
 import play.api.{BuiltInComponents, Mode}
 import play.api.mvc.{Action, Results}
 import play.api.routing.Router
 import play.core.server.{NettyServerComponents, ServerConfig}
 import play.api.routing.sird._
-import play.api.libs.concurrent.Execution.Implicits._
 
 object ServerApp extends App {
 
