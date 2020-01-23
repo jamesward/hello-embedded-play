@@ -8,5 +8,5 @@ Run Locally:
 ./sbt ~reStart
 ```
 
-Deploy on Google Cloud:
+Deploy on Google Cloud:  
 [![Run on Google Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run)

@@ -1,3 +1,5 @@
+enablePlugins(JavaAppPackaging)
+
 name := "hello-embedded-play"
 
 scalaSource in Compile := baseDirectory.value / "app"
@@ -12,5 +14,3 @@ libraryDependencies := Seq(
   "com.typesafe.play" %% "play-akka-http-server" % "2.8.0",
   "org.slf4j" % "slf4j-simple" % "1.7.21"
 )
-
-enablePlugins(JavaAppPackaging)
