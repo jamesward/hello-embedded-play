@@ -1,31 +1,28 @@
-import play.api.{BuiltInComponents, Mode}
-import play.api.mvc.{EssentialFilter, Results}
+import play.api.Mode
+import play.api.mvc.Results
 import play.api.routing.Router
-import play.core.server.{NettyServerComponents, ServerConfig}
 import play.api.routing.sird._
+import play.core.server.{DefaultAkkaHttpServerComponents, ServerConfig}
+
+import scala.util.Try
 
 object ServerApp extends App {
 
-  val components = new NettyServerComponents with BuiltInComponents {
+  val components = new DefaultAkkaHttpServerComponents {
+    private[this] lazy val port = sys.env.get("PORT").flatMap(s => Try(s.toInt).toOption).getOrElse(9000)
+    private[this] lazy val mode = if (configuration.get[String]("play.http.secret.key").contains("changeme")) Mode.Dev else Mode.Prod
 
-    private[this] val port = sys.env.getOrElse("PORT", "8080").toInt
-    private[this] val mode = if (configuration.get[String]("play.http.secret.key").contains("changeme")) Mode.Dev else Mode.Prod
+    override lazy val serverConfig: ServerConfig = ServerConfig(port = Some(port), mode = mode)
 
-    override lazy val serverConfig = ServerConfig(port = Some(port), mode = mode)
-
-    lazy val router = Router.from {
-      case GET(p"/") => Action {
-        Results.Ok("hello, world")
-      }
+    override lazy val router: Router = Router.from {
+      case GET(p"/") =>
+        Action {
+          Results.Ok("hello, world")
+        }
     }
-
-    override def httpFilters = Seq.empty
   }
 
-  val server = components.server
-
-  while (!Thread.currentThread.isInterrupted) {}
-
-  server.stop()
+  // server is lazy so eval it to start it
+  components.server
 
 }
